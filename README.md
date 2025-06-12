@@ -17,7 +17,7 @@ Frontend:
 - HTML
 - CSS
 - JavaScript
- Backend:
+Backend:
 - Python (Flask)
 - DeepFace 
 - OpenCV 
