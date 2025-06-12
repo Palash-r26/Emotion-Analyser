@@ -17,6 +17,7 @@ This web application captures real-time webcam input from the user's browser, se
 - HTML
 - CSS
 - JavaScript
+  
 **Backend:**
 - Python (Flask)
 - DeepFace 
