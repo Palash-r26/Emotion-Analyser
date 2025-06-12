@@ -56,25 +56,22 @@ bash
 
 ## Folder Structure
 Emotion-Analyser-Project/
-│
 ├── frontend/
-│ ├── index.html
+│ ├── index 1.html 
+│ ├── index 2.html
 │ ├── style.css
 │ └── script.js
-│
-├── backend/
-│ ├── app.py
-│ ├── requirements.txt
-│
-├── Emotion-Analyser-Report.pdf
+├── app.py
+├──  face5.mp4
+├── Emotion Analyser Report file by Palash.pdf
 └── README.md
 
 ##  Project Report
-See [Emotion-Analyser-Report.pdf](./Emotion-Analyser-Report.pdf) for full documentation.
+Check (./Emotion Analyser Report file by Palash.pdf) for full documentation.
 
 ## Output Screenshots: 
-1. d
-2. xs
+1. front page.png
+2. Result page.png
 
 ## Real-Life Applications:
 1. Human-Computer Interaction
