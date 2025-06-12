@@ -70,9 +70,8 @@ This web application captures real-time webcam input from the user's browser, se
    * Detect the emotion using **DeepFace**.
    * Change the **background color** based on the detected emotion.
    * Suggest a **YouTube song link** matching your mood.
-
+   
 ## Folder Structure
-
 Emotion-Analyser-Project/
 ├── frontend/
 │   ├── index 1.html 
