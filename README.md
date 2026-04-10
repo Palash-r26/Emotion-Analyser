@@ -79,6 +79,8 @@ http://127.0.0.1:5000
 
 ## Deploy on Render
 
+Important: TensorFlow does not provide wheels for Python 3.14 yet. Use Python 3.10.14.
+
 - Build command:
 
 ```bash
@@ -96,6 +98,17 @@ Render-ready files included:
 - Procfile
 - render-build.sh
 - requirements.txt
+- runtime.txt
+- .python-version
+- render.yaml
+
+### Required Render Settings
+
+- Python Version: 3.10.14
+- Build Command: bash render-build.sh
+- Start Command: gunicorn app:app --bind 0.0.0.0:$PORT --workers 1 --threads 4 --timeout 120
+
+If your existing Render service still shows Python 3.14.x in logs, set Python Version manually in service settings and redeploy.
 
 ## Current Repository Structure
 
