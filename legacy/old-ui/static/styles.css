@@ -17,47 +17,37 @@
 
 .container {
     position: absolute;
-    top: 50%;
-    left: 8%;
-    transform: translateY(-50%);
-    padding: 70px;
-    border-radius: 30px;
-    text-align: left;
-    width: 50%;
-    color: white;
+  top: 66%;
+  left: 14%;
+  width: min(330px, 44vw);
+  height: clamp(56px, 7.5vw, 90px);
+  z-index: 2;
 }
 
-h1 {
-    font-size: 4rem;
-    margin-bottom: 20px; 
-    margin-left: -78px;
-    text-align: left;
-}
-
-p {
-    font-size: 1.6rem;
-    margin-bottom: 30px; 
-    margin-left: -75px;
-    text-align: left;
-}
-
-button {
-    background: red;
-    color: white;
+.analyze-overlay-btn {
+  width: 100%;
+  height: 100%;
+  background: transparent;
+  color: transparent;
     border: none;
-    padding: 15px 25px;
-    font-size: 1.5rem;
-    border-radius: 10px;
+  border-radius: 14px;
     cursor: pointer;
-    transition: 0.3s;
-    display: block;
-    text-align: left; 
-    margin-left: -75px;
+  transition: box-shadow 0.2s ease;
 }
 
-button:hover {
-    background: darkred;
-} 
+.analyze-overlay-btn:focus-visible {
+  box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.85);
+}
+
+@media (max-width: 768px) {
+  .container {
+    top: 63%;
+    left: 12%;
+    width: 52vw;
+    height: clamp(52px, 10vw, 72px);
+  }
+}
+
 .suggestions {
   background-color: #1e1e2f;
   padding: 2rem;

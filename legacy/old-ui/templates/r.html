@@ -9,13 +9,11 @@
 <body> 
     
     <video autoplay loop muted class="video-bg">
-        <source src="{{ url_for('static', filename='face5.mp4') }}" type="video/mp4">
+        <source src="{{ url_for('static', filename='face5.1.mp4') }}" type="video/mp4">
     </video>
 
     <div class="container">
-        <h1>Emotion Analyzer</h1>
-        <p>Detect your emotions and get personalized recommendations.</p>
-        <button onclick="window.open('/analyze', '_blank')">Analyze Emotion</button>
+        <button class="analyze-overlay-btn" onclick="window.open('/analyze', '_blank')" aria-label="Analyze Emotion">Analyze Emotion</button>
     </div>
 
     <script src="p.js"></script>
