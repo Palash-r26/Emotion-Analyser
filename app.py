@@ -6,8 +6,8 @@ from pathlib import Path
 import cv2
 import numpy as np
 from deepface import DeepFace
-from flask_cors import CORS
 from flask import Flask, Response, jsonify, render_template, request, stream_with_context
+from flask_cors import CORS
 
 BASE_DIR = Path(__file__).resolve().parent
 FRONTEND_DIR = BASE_DIR / "frontend"
