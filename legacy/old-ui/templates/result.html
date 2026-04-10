@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Emotion Detection Result</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      background: #111;
+      color: #fff;
+      font-family: 'Segoe UI', sans-serif;
+      display: flex;
+      flex-direction: row;
+      height: 100vh;
+      overflow: hidden;
+    }
+
+    .video-container {
+      flex: 1;
+      display: flex; 
+      margin-top: 15px;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      border-right: 2px solid #444;
+      padding: 20px;
+      position: relative;
+    }
+
+    .video-container img {
+      border-radius: 15px;
+      box-shadow: 0 0 20px #000;
+    }
+
+    .refresh-button {
+      position: fixed;
+      bottom: 30px;
+      left: 25%;
+      transform: translateX(-50%);
+      padding: 15px 25px;
+      font-size: 21px;
+      background-color:rgb(68, 1, 87);
+      color: white;
+      border: none;
+      border-radius: 15px;
+      cursor: pointer;
+    }
+
+    .suggestions-container {
+      flex: 1;
+      padding: 30px;
+      overflow-y: auto;
+    }
+
+    .suggestions-container h2 {
+      color: #00ffcc;
+      margin-bottom: 20px;
+    }
+
+    .emotion-text {
+      color: #ffcc00;
+    }
+
+    .suggestions-container ul {
+      list-style-type: none;
+      padding: 0;
+    }
+
+    .suggestions-container li {
+      background: #222;
+      padding: 12px 18px;
+      margin-bottom: 10px;
+      border-radius: 8px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.5);
+    }
+
+    #debug-emotion {
+      font-size: 14px;
+      color: #888;
+    }
+  </style>
+</head>
+<body>
+  <button onclick="location.reload()" style=" z-index: 10; "class="refresh-button">Refresh</button>
+
+  <div class="video-container" style="position: relative; display: inline-block;">
+    <img src="{{ url_for('video_feed') }}" width="700" height="480" />
+    
+  </div>
+
+  
+
+  <div class="suggestions-container">
+    <h2>Detected Emotion: <span class="emotion-text">Detecting...</span></h2>
+    <p id="debug-emotion">Current: </p>
+    <p>Suggestions will appear here after emotion is stable for 7 seconds.</p>
+    <ul id="song-list">
+      <li>Detecting emotion...</li>
+    </ul>
+  </div>
+
+  <script> 
+    function fetchEmotion() {
+      fetch("/current_emotion")
+          .then(response => response.json())
+          .then(data => {
+              document.getElementById("emotion").innerText = data.emotion;
+          })
+          .catch(error => {
+              console.error("Error fetching emotion:", error);
+          });
+  }
+
+  // Call every 1 second to update emotion text
+  setInterval(fetchEmotion, 1000);
+    const songs = {
+      happy: [
+        "Phir Se Ud Chala - Rockstar",
+        "Gallan Goodiyan - Dil Dhadakne Do",
+        "London Thumakda - Queen",
+        "Aaj Ki Party - Bajrangi Bhaijaan"
+      ],
+      sad: [
+        "Channa Mereya - Ae Dil Hai Mushkil",
+        "Tujhe Kitna Chahne Lage - Kabir Singh",
+        "Agar Tum Saath Ho - Tamasha",
+        "Bhula Dena - Aashiqui 2"
+      ],
+      angry: [
+        "Zinda - Bhaag Milkha Bhaag",
+        "Khoon Chala - Rang De Basanti",
+        "Malang (Title Track)",
+        "Bhaag D.K. Bose - Delhi Belly"
+      ],
+      neutral: [
+        "Ilahi - Yeh Jawaani Hai Deewani",
+        "Kun Faya Kun - Rockstar",
+        "Raabta - Agent Vinod",
+        "Dil Diyan Gallan - Tiger Zinda Hai"
+      ],
+      surprise: [
+        "Jabra Fan - Fan",
+        "Nashe Si Chadh Gayi - Befikre",
+        "Kar Gayi Chull - Kapoor & Sons"
+      ],
+      fear: [
+        "Naina - Dangal",
+        "Khamoshiyan - Khamoshiyan",
+        "Jiyein Kyun - Dum Maaro Dum"
+      ],
+      disgust: [
+        "Swag Se Swagat - Tiger Zinda Hai",
+        "Breakup Song - Ae Dil Hai Mushkil",
+        "Let’s Nacho - Kapoor & Sons"
+      ]
+    };
+
+    let lastEmotion = '';
+    let emotionStartTime = null;
+    let stableEmotion = '';
+    const STABLE_DURATION = 7000;
+
+    function updateSongs(emotion) {
+      const list = document.getElementById('song-list');
+      list.innerHTML = "";
+
+      const recommended = songs[emotion] || songs["neutral"];
+      recommended.forEach(song => {
+        const li = document.createElement("li");
+        li.textContent = song;
+        list.appendChild(li);
+      });
+
+      document.querySelector('.emotion-text').textContent = emotion;
+    }
+
+    async function fetchEmotion() {
+      try {
+        const response = await fetch('/current_emotion');
+        const data = await response.json();
+        const detectedEmotion = data.emotion;
+    
+        document.getElementById("debug-emotion").textContent = "Current: " + detectedEmotion;
+    
+        if (detectedEmotion !== lastEmotion) {
+          lastEmotion = detectedEmotion;
+          emotionStartTime = new Date().getTime();
+        } else {
+          const now = new Date().getTime();
+          if (now - emotionStartTime >= STABLE_DURATION && detectedEmotion !== stableEmotion) {
+            stableEmotion = detectedEmotion;
+            updateSuggestions(stableEmotion);
+            console.log("Stable emotion:", stableEmotion);
+          }
+        }
+      } catch (error) {
+        console.error('Error fetching emotion:', error);
+      }
+    }
+    
+      function refreshFeed() {
+        const feed = document.getElementById("live-Feed");
+         feed.src = "{{ url_for('video_feed') }}" + "?" + new Date().getTime(); // cache buster
+      }
+   
+    setInterval(fetchEmotion, 1000);
+  </script>
+</body>
+</html>

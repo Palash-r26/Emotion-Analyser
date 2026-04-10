@@ -1,108 +1,141 @@
 # Emotion-Analyser
-A real-time Emotion Detection Web Application built as a Minor Project-II for B.Tech Computer Science & Design (MITS), Semester 2 using HTML, CSS, JavaScript (Frontend) and Python Flask with OpenCV and DeepFace library (Backend).This project captures real-time webcam input, detects facial emotions such as Happy, Sad, Neutral, Fear, or Angry using the DeepFace library, and displays the detected emotion on the web interface. Additionally, the background color of the webpage changes according to the detected emotion and suggests a YouTube song link based on the user's emotion.
 
-## Project Overview
-This web application captures real-time webcam input from the user's browser, sends the data to a Python Flask backend, and uses the DeepFace library for facial emotion recognition. The detected emotion is then displayed on the web page.
+A Flask-based emotion analysis web app that captures webcam frames in the browser, sends them to the backend, runs DeepFace emotion inference, and returns real-time mood-based song suggestions.
 
-## Features
+## Highlights
 
-- Real-time webcam capture using browser.
-- Live face detection and emotion recognition using the DeepFace library in the Flask backend.
-- Frontend (HTML, CSS, JavaScript) connected to Python Flask backend for seamless real-time communication.
-- Dynamic background color change on the webpage based on the detected emotion.
-- Emotion-based YouTube song suggestions.
+- Browser-side webcam capture (cloud-safe, Render compatible)
+- Frame upload API using Base64 image snapshots
+- DeepFace emotion inference with robust settings
+- Dynamic UI updates for detected emotion
+- Stabilized song recommendations based on sustained emotion
 
 ## Tech Stack
-**Frontend:**
-- HTML
-- CSS
-- JavaScript
-  
-**Backend:**
-- Python (Flask)
-- DeepFace 
-- OpenCV 
 
-## Workflow
+- Frontend: HTML, CSS, JavaScript
+- Backend: Python, Flask, Flask-CORS
+- ML/CV: DeepFace, TensorFlow, OpenCV (headless), NumPy
+- Deployment: Render + Gunicorn
 
-1. User opens homepage.
-2. User clicks the "Analyze Emotion" button.
-3. JavaScript sends a request to the Python (Flask) backend.
-4. Backend triggers the webcam feed using OpenCV.
-5. Emotion is continuously analyzed for 7 seconds in the backend.
-6. Detected emotion is sent back to JavaScript (frontend).
-7. JavaScript loads the HTML page with the received emotion data.
-8. Display results on the web page along with song suggestions based on the detected emotion.
+## Architecture
 
-## How to Use
-1. Clone this repository to your local machine:
-   
-3. Install required Python libraries from the backend folder:
+1. Browser opens webcam using getUserMedia.
+2. Frontend captures a frame every 3 seconds.
+3. Frame is converted to Base64 and sent to POST /process_frame.
+4. Flask decodes image and runs DeepFace.analyze with enforce_detection=False.
+5. Backend returns dominant emotion as JSON.
+6. Frontend updates detected emotion immediately.
+7. Song recommendations update only after emotion is stable for 7 seconds.
 
-   ```bash
-   pip install -r requirements.txt
-   ```
+## API
 
-   i.e.
+### POST /process_frame
 
-   ```bash
-   pip install flask
-   pip install opencv-python
-   pip install deepface
-   ```
+Request body:
 
-4. Run the Flask backend server:
+```json
+{
+   "image": "data:image/jpeg;base64,..."
+}
+```
 
-   ```bash
-   python app.py
-   ```
+Success response:
 
-5. Open the `index.html` file located in the `/frontend` folder using any modern web browser (e.g., Chrome).
+```json
+{
+   "emotion": "happy"
+}
+```
 
-6. Allow webcam access when prompted by the browser.
+Error response:
 
-7. Click the "Analyze Emotion" button on the homepage.
+```json
+{
+   "error": "Missing base64 image payload."
+}
+```
 
-8. The system will:
+## Local Setup
 
-   * Capture real-time webcam feed.
-   * Send the frame to the backend for analysis.
-   * Detect the emotion using **DeepFace**.
-   * Change the **background color** based on the detected emotion.
-   * Suggest a **YouTube song link** matching your mood.
-   
-## Folder Structure
-Emotion-Analyser-Project/
-├── frontend/
-│   ├── index 1.html 
-│   ├── index 2.html
-│   ├── style.css
-│   └── script.js
-├── app.py
-├── face5.mp4
-├── Emotion Analyser Report file by Palash.pdf
-└── README.md
+1. Clone the repository.
+2. Create and activate a virtual environment.
+3. Install dependencies:
 
-## Project Report
+```bash
+pip install -r requirements.txt
+```
 
-Check [`Emotion Analyser Report file by Palash.pdf`](./Emotion%20Analyser%20Report%20file%20by%20Palash.pdf) for full documentation.
+4. Run the app:
 
-## Output Screenshots
-1. front page.png
-2. Result page.png
+```bash
+python app.py
+```
 
+5. Open:
 
-## Real-Life Applications
-1. Human-Computer Interaction
-2. Restaurants and homes
-3. Doctors and Therapists
-4. Security and Surveillance
-5. E-learning platforms
+```text
+http://127.0.0.1:5000
+```
+
+## Deploy on Render
+
+- Build command:
+
+```bash
+bash render-build.sh
+```
+
+- Start command:
+
+```bash
+gunicorn app:app --bind 0.0.0.0:$PORT --workers 1 --threads 4 --timeout 120
+```
+
+Render-ready files included:
+
+- Procfile
+- render-build.sh
+- requirements.txt
+
+## Current Repository Structure
+
+```text
+Emotion-Analyser/
+|-- app.py
+|-- requirements.txt
+|-- Procfile
+|-- render-build.sh
+|-- frontend/
+|   |-- index 1.html
+|   |-- index 2.html
+|   |-- script.js
+|   |-- styles.css
+|   `-- face5.mp4
+|-- legacy/
+|   |-- old-ui/
+|   |   |-- templates/
+|   |   `-- static/
+|   `-- misc/
+|-- README.md
+|-- Emotion Analyser Report file by Palash.pdf
+|-- front page.png
+`-- Result page.png
+```
+
+## Structure Notes
+
+- The app currently prefers frontend/ for templates and static files.
+- Legacy files are archived inside legacy/ to keep the root clean.
+- Active runtime assets are inside frontend/ only.
+
+## Screenshots and Report
+
+- Front page: front page.png
+- Result page: Result page.png
+- Report: Emotion Analyser Report file by Palash.pdf
 
 ## Authors
-* [Palash Rai](https://github.com/Palash-r26)
-* Prarthana Sharma
-* Sarvesh Baghel
 
-## License
-This project is licensed under the MITS License.
+- [Palash Rai](https://github.com/Palash-r26)
+- Prarthana Sharma
+- Sarvesh Baghel
