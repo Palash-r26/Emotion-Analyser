@@ -52,6 +52,11 @@ const canvasCtx = canvasEl.getContext("2d");
 const debugEl = document.getElementById("debug-emotion");
 const emotionEl = document.querySelector(".emotion-text");
 
+// Apply camera flip (mirror effect) via CSS
+if (videoEl) {
+  videoEl.style.transform = "scaleX(-1)";
+}
+
 function getVideoId(url) {
   if (url.includes("watch?v=")) {
     return url.split("watch?v=")[1].split("&")[0];
@@ -114,7 +119,11 @@ async function processCurrentFrame() {
 
   isProcessingFrame = true;
 
-  canvasCtx.drawImage(videoEl, 0, 0, canvasEl.width, canvasEl.height);
+  // Flip the canvas horizontally to send un-flipped frame to server for correct emotion detection
+  canvasCtx.save();
+  canvasCtx.scale(-1, 1);
+  canvasCtx.drawImage(videoEl, -canvasEl.width, 0, canvasEl.width, canvasEl.height);
+  canvasCtx.restore();
   const imageData = canvasEl.toDataURL("image/jpeg", 0.8);
 
   try {

@@ -30,14 +30,14 @@
 h1 {
     font-size: 4rem;
     margin-bottom: 20px; 
-    margin-left: -78px;
+    margin-left: 0;
     text-align: left;
 }
 
 p {
     font-size: 1.6rem;
     margin-bottom: 30px; 
-    margin-left: -75px;
+    margin-left: 0;
     text-align: left;
 }
 
@@ -52,7 +52,7 @@ button {
     transition: 0.3s;
     display: block;
     text-align: left; 
-    margin-left: -75px;
+    margin-left: 0;
 }
 
 button:hover {
