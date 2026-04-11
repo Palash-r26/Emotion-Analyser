@@ -6,7 +6,7 @@ from pathlib import Path
 import cv2
 import numpy as np
 from deepface import DeepFace
-from flask import Flask, Response, jsonify, render_template, request, stream_with_context
+from flask import Flask, Response, jsonify, render_template, request, send_file, stream_with_context
 from flask_cors import CORS
 
 BASE_DIR = Path(__file__).resolve().parent
@@ -20,6 +20,9 @@ app = Flask(
     static_folder=str(STATIC_DIR),
     static_url_path="/static",
 )
+
+app.config["TEMPLATES_AUTO_RELOAD"] = True
+app.config["SEND_FILE_MAX_AGE_DEFAULT"] = 0
 
 CORS(
     app,
@@ -213,6 +216,11 @@ def video_feed():
 @app.route("/current_emotion")
 def current_emotion():
     return jsonify({"emotion": global_emotion})
+
+
+@app.route("/face5.mp4")
+def root_face_video():
+    return send_file(BASE_DIR / "face5.mp4", mimetype="video/mp4")
 
 
 if __name__ == "__main__":
