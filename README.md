@@ -2,6 +2,8 @@
 
 A Flask-based emotion analysis web app that captures webcam frames in the browser, sends them to the backend, runs DeepFace emotion inference, and returns real-time mood-based song suggestions.
 
+Live website: https://emotion-analyser-fb5h.onrender.com
+
 ## Highlights
 
 - Browser-side webcam capture (cloud-safe, Render compatible)
@@ -78,6 +80,8 @@ http://127.0.0.1:5000
 ```
 
 ## Deploy on Render
+
+Live deployment: https://emotion-analyser-fb5h.onrender.com
 
 Important: TensorFlow does not provide wheels for Python 3.14 yet. Use Python 3.10.14.
 
